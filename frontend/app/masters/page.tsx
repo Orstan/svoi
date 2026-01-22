@@ -1,12 +1,12 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { MapPin, Star, Search, Filter } from 'lucide-react';
 import { mastersApi, categoriesApi, locationsApi } from '@/lib/api';
 
-export default function MastersPage() {
+function MastersContent() {
   const searchParams = useSearchParams();
   const [masters, setMasters] = useState<any[]>([]);
   const [categories, setCategories] = useState<any[]>([]);
@@ -196,5 +196,17 @@ export default function MastersPage() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function MastersPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
+      </div>
+    }>
+      <MastersContent />
+    </Suspense>
   );
 }
