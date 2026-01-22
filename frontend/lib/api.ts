@@ -33,6 +33,7 @@ export const authApi = {
 
 export const categoriesApi = {
   getAll: () => api.get('/categories'),
+  list: () => api.get('/categories'),
   getBySlug: (slug: string) => api.get(`/categories/${slug}`),
 };
 

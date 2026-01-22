@@ -40,7 +40,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     }
   },
 
-  register: async (data: any) => {
+  register: async (data: { name: string; email: string; password: string; password_confirmation: string }) => {
     try {
       const response = await authApi.register(data);
       const { user, token } = response.data;

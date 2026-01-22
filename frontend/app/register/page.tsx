@@ -29,7 +29,7 @@ export default function RegisterPage() {
     setLoading(true);
 
     try {
-      await register(formData.name, formData.email, formData.password, formData.password_confirmation);
+      await register(formData);
       router.push('/profile');
     } catch (err: any) {
       setError(err.response?.data?.message || 'Помилка реєстрації');
