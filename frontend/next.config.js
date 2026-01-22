@@ -2,18 +2,13 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ['localhost', 'your-backend-domain.com'],
+    domains: ['localhost', 'svoi24.pl', 'api.svoi24.pl'],
     remotePatterns: [
       {
         protocol: 'https',
         hostname: '**.amazonaws.com',
       },
     ],
-  },
-  i18n: {
-    locales: ['uk', 'pl', 'en'],
-    defaultLocale: 'uk',
-    localeDetection: true,
   },
 }
 
