@@ -39,6 +39,7 @@ export const categoriesApi = {
 export const locationsApi = {
   getAll: () => api.get('/locations'),
   getVoivodeships: () => api.get('/locations/voivodeships'),
+  voivodeships: () => api.get('/locations/voivodeships'),
   getCities: (voivodeshipId?: number) => 
     api.get('/locations/cities', { params: { voivodeship_id: voivodeshipId } }),
   getBySlug: (slug: string) => api.get(`/locations/${slug}`),
@@ -46,7 +47,9 @@ export const locationsApi = {
 
 export const mastersApi = {
   getAll: (params?: any) => api.get('/masters', { params }),
+  list: (params?: any) => api.get('/masters', { params }),
   getById: (id: number) => api.get(`/masters/${id}`),
+  show: (id: string) => api.get(`/masters/${id}`),
   create: (data: any) => api.post('/masters', data),
   update: (id: number, data: any) => api.put(`/masters/${id}`, data),
   uploadPortfolio: (id: number, formData: FormData) => 
