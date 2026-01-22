@@ -1,0 +1,89 @@
+'use client';
+
+import { useState } from 'react';
+import { Search, MapPin } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+
+export function Hero() {
+  const router = useRouter();
+  const [searchQuery, setSearchQuery] = useState('');
+  const [location, setLocation] = useState('');
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    const params = new URLSearchParams();
+    if (searchQuery) params.set('search', searchQuery);
+    if (location) params.set('location', location);
+    router.push(`/masters?${params.toString()}`);
+  };
+
+  return (
+    <section className="bg-gradient-to-br from-primary-50 to-secondary-50 py-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-12">
+          <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-4">
+            Свої для Своїх
+          </h1>
+          <p className="text-xl md:text-2xl text-gray-700">
+            Знайди українських майстрів у Польщі
+          </p>
+        </div>
+
+        <form 
+          onSubmit={handleSearch}
+          className="max-w-4xl mx-auto bg-white rounded-2xl shadow-lg p-4"
+        >
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="md:col-span-2 relative">
+              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+              <input
+                type="text"
+                placeholder="Що шукаєте? (манікюр, сантехнік...)"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+              />
+            </div>
+            <div className="relative">
+              <MapPin className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+              <input
+                type="text"
+                placeholder="Місто (Warszawa, Kraków...)"
+                value={location}
+                onChange={(e) => setLocation(e.target.value)}
+                className="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+              />
+            </div>
+          </div>
+          <button
+            type="submit"
+            className="w-full mt-4 bg-primary-500 text-white py-3 rounded-lg hover:bg-primary-600 transition font-medium text-lg"
+          >
+            Знайти майстра
+          </button>
+        </form>
+
+        <div className="mt-8 text-center">
+          <p className="text-gray-600">
+            Популярні пошуки:{' '}
+            <button onClick={() => router.push('/masters?category=manicure')} className="text-primary-600 hover:underline">
+              Манікюр
+            </button>
+            {', '}
+            <button onClick={() => router.push('/masters?category=hydraulik')} className="text-primary-600 hover:underline">
+              Сантехнік
+            </button>
+            {', '}
+            <button onClick={() => router.push('/masters?category=fryzjer')} className="text-primary-600 hover:underline">
+              Перукар
+            </button>
+            {', '}
+            <button onClick={() => router.push('/masters?category=korepetycje')} className="text-primary-600 hover:underline">
+              Репетитор
+            </button>
+          </p>
+        </div>
+      </div>
+    </section>
+  );
+}
