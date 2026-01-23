@@ -78,7 +78,7 @@ function MastersContent() {
                 <option value="">Всі категорії</option>
                 {categories.map((cat) => (
                   <option key={cat.id} value={cat.id}>
-                    {cat.name_uk}
+                    {cat.name}
                   </option>
                 ))}
               </select>
@@ -96,7 +96,7 @@ function MastersContent() {
                 <option value="">Вся Польща</option>
                 {voivodeships.map((loc) => (
                   <option key={loc.id} value={loc.id}>
-                    {loc.name_uk}
+                    {loc.name}
                   </option>
                 ))}
               </select>
@@ -157,7 +157,7 @@ function MastersContent() {
 
                   <div className="flex items-center text-sm text-gray-600 mb-2">
                     <MapPin size={16} className="mr-1" />
-                    {master.location?.name_uk}
+                    {master.location?.name}
                   </div>
 
                   {master.rating > 0 && (
