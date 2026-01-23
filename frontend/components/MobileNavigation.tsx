@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
-import { Home, Menu, Plus, MessageCircle, User, X } from 'lucide-react';
+import { Home, Menu, Plus, MessageCircle, User, X, Users, Grid3x3, HelpCircle, Info, Mail } from 'lucide-react';
 
 export default function MobileNavigation() {
   const pathname = usePathname();
@@ -47,11 +47,11 @@ export default function MobileNavigation() {
   ];
 
   const menuItems = [
-    { name: 'Майстри', href: '/masters' },
-    { name: 'Категорії', href: '/categories' },
-    { name: 'Як це працює', href: '/how-it-works' },
-    { name: 'Про нас', href: '/about' },
-    { name: 'Контакти', href: '/contact' },
+    { name: 'Майстри', href: '/masters', icon: Users, color: 'text-blue-600', bgColor: 'bg-blue-50' },
+    { name: 'Категорії', href: '/categories', icon: Grid3x3, color: 'text-purple-600', bgColor: 'bg-purple-50' },
+    { name: 'Як це працює', href: '/how-it-works', icon: HelpCircle, color: 'text-green-600', bgColor: 'bg-green-50' },
+    { name: 'Про нас', href: '/about', icon: Info, color: 'text-orange-600', bgColor: 'bg-orange-50' },
+    { name: 'Контакти', href: '/contact', icon: Mail, color: 'text-red-600', bgColor: 'bg-red-50' },
   ];
 
   return (
