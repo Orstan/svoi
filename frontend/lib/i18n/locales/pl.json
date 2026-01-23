@@ -1,0 +1,66 @@
+{
+  "common": {
+    "loading": "Ładowanie...",
+    "error": "Błąd",
+    "success": "Sukces",
+    "cancel": "Anuluj",
+    "save": "Zapisz",
+    "delete": "Usuń",
+    "edit": "Edytuj",
+    "search": "Szukaj",
+    "filter": "Filtr"
+  },
+  "nav": {
+    "home": "Strona główna",
+    "masters": "Mistrzowie",
+    "categories": "Kategorie",
+    "favorites": "Ulubione",
+    "profile": "Profil",
+    "messages": "Wiadomości",
+    "login": "Zaloguj się",
+    "register": "Zarejestruj się",
+    "logout": "Wyloguj",
+    "becomeMaster": "Zostań mistrzem"
+  },
+  "home": {
+    "title": "Swoi dla Swoich",
+    "subtitle": "Znajdź sprawdzonych ukraińskich mistrzów w Polsce",
+    "searchPlaceholder": "Szukaj mistrza lub usługi...",
+    "popularCategories": "Popularne kategorie",
+    "featuredMasters": "Polecani mistrzowie"
+  },
+  "master": {
+    "verified": "Zweryfikowany",
+    "pro": "PRO",
+    "experience": "Doświadczenie",
+    "years": "lat",
+    "reviews": "opinii",
+    "services": "Usługi",
+    "portfolio": "Portfolio",
+    "about": "O mistrzu",
+    "contact": "Kontakt",
+    "addToFavorites": "Dodaj do ulubionych",
+    "removeFromFavorites": "Usuń z ulubionych"
+  },
+  "reviews": {
+    "title": "Opinie",
+    "leave": "Zostaw opinię",
+    "rating": "Ocena",
+    "comment": "Komentarz",
+    "submit": "Wyślij",
+    "noReviews": "Brak opinii"
+  },
+  "auth": {
+    "login": "Logowanie",
+    "register": "Rejestracja",
+    "email": "Email",
+    "password": "Hasło",
+    "name": "Imię",
+    "phone": "Telefon",
+    "forgotPassword": "Zapomniałeś hasła?",
+    "noAccount": "Nie masz konta?",
+    "hasAccount": "Masz już konto?",
+    "loginSuccess": "Zalogowano pomyślnie",
+    "registerSuccess": "Rejestracja zakończona"
+  }
+}

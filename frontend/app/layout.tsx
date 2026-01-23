@@ -4,6 +4,11 @@ import './globals.css';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import MobileNavigation from '@/components/MobileNavigation';
+import dynamic from 'next/dynamic';
+
+const GoogleAnalytics = dynamic(() => import('@/components/GoogleAnalytics'), {
+  ssr: false,
+});
 
 const inter = Inter({ subsets: ['latin', 'cyrillic'] });
 
@@ -12,8 +17,20 @@ export const metadata: Metadata = {
   description: 'Знайдіть перевірених українських майстрів у Польщі. Ремонт, будівництво, краса, навчання та інші послуги від професіоналів. ✓ Відгуки ✓ Рейтинги ✓ Гарантія якості',
   keywords: 'українські майстри польща, послуги україномовні, ремонт польща, будівництво, майстри варшава, краса польща',
   metadataBase: new URL('https://svoi24.pl'),
+  manifest: '/manifest.json',
   icons: {
     icon: '/favicon.ico',
+    apple: '/icon-192.png',
+  },
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: 'Svoi24',
+  },
+  viewport: {
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 1,
   },
   openGraph: {
     type: 'website',
@@ -41,6 +58,7 @@ export default function RootLayout({
   return (
     <html lang="uk">
       <body className={inter.className}>
+        <GoogleAnalytics />
         <Header />
         <main className="min-h-screen pb-20 md:pb-0">{children}</main>
         <Footer />

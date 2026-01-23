@@ -1,0 +1,66 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "search": "Search",
+    "filter": "Filter"
+  },
+  "nav": {
+    "home": "Home",
+    "masters": "Masters",
+    "categories": "Categories",
+    "favorites": "Favorites",
+    "profile": "Profile",
+    "messages": "Messages",
+    "login": "Login",
+    "register": "Register",
+    "logout": "Logout",
+    "becomeMaster": "Become a Master"
+  },
+  "home": {
+    "title": "Svoi for Svoi",
+    "subtitle": "Find verified Ukrainian masters in Poland",
+    "searchPlaceholder": "Search for master or service...",
+    "popularCategories": "Popular categories",
+    "featuredMasters": "Featured masters"
+  },
+  "master": {
+    "verified": "Verified",
+    "pro": "PRO",
+    "experience": "Experience",
+    "years": "years",
+    "reviews": "reviews",
+    "services": "Services",
+    "portfolio": "Portfolio",
+    "about": "About master",
+    "contact": "Contact",
+    "addToFavorites": "Add to favorites",
+    "removeFromFavorites": "Remove from favorites"
+  },
+  "reviews": {
+    "title": "Reviews",
+    "leave": "Leave a review",
+    "rating": "Rating",
+    "comment": "Comment",
+    "submit": "Submit",
+    "noReviews": "No reviews yet"
+  },
+  "auth": {
+    "login": "Login",
+    "register": "Register",
+    "email": "Email",
+    "password": "Password",
+    "name": "Name",
+    "phone": "Phone",
+    "forgotPassword": "Forgot password?",
+    "noAccount": "Don't have an account?",
+    "hasAccount": "Already have an account?",
+    "loginSuccess": "Successfully logged in",
+    "registerSuccess": "Registration successful"
+  }
+}

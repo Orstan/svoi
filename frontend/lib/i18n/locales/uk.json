@@ -1,0 +1,66 @@
+{
+  "common": {
+    "loading": "Завантаження...",
+    "error": "Помилка",
+    "success": "Успішно",
+    "cancel": "Скасувати",
+    "save": "Зберегти",
+    "delete": "Видалити",
+    "edit": "Редагувати",
+    "search": "Пошук",
+    "filter": "Фільтр"
+  },
+  "nav": {
+    "home": "Головна",
+    "masters": "Майстри",
+    "categories": "Категорії",
+    "favorites": "Улюблені",
+    "profile": "Профіль",
+    "messages": "Повідомлення",
+    "login": "Увійти",
+    "register": "Реєстрація",
+    "logout": "Вийти",
+    "becomeMaster": "Стати майстром"
+  },
+  "home": {
+    "title": "Свої для Своїх",
+    "subtitle": "Знайдіть перевірених українських майстрів у Польщі",
+    "searchPlaceholder": "Шукати майстра або послугу...",
+    "popularCategories": "Популярні категорії",
+    "featuredMasters": "Рекомендовані майстри"
+  },
+  "master": {
+    "verified": "Верифікований",
+    "pro": "PRO",
+    "experience": "Досвід",
+    "years": "років",
+    "reviews": "відгуків",
+    "services": "Послуги",
+    "portfolio": "Портфоліо",
+    "about": "Про майстра",
+    "contact": "Зв'язатися",
+    "addToFavorites": "Додати в улюблені",
+    "removeFromFavorites": "Видалити з улюблених"
+  },
+  "reviews": {
+    "title": "Відгуки",
+    "leave": "Залишити відгук",
+    "rating": "Оцінка",
+    "comment": "Коментар",
+    "submit": "Відправити",
+    "noReviews": "Відгуків поки немає"
+  },
+  "auth": {
+    "login": "Вхід",
+    "register": "Реєстрація",
+    "email": "Email",
+    "password": "Пароль",
+    "name": "Ім'я",
+    "phone": "Телефон",
+    "forgotPassword": "Забули пароль?",
+    "noAccount": "Немає акаунту?",
+    "hasAccount": "Вже є акаунт?",
+    "loginSuccess": "Ви успішно увійшли",
+    "registerSuccess": "Реєстрація успішна"
+  }
+}
