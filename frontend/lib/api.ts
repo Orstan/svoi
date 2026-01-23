@@ -62,14 +62,19 @@ export const mastersApi = {
 };
 
 export const reviewsApi = {
-  create: (masterProfileId: number, data: any) => 
-    api.post(`/masters/${masterProfileId}/reviews`, data),
+  create: (data: any) => 
+    api.post(`/masters/${data.master_id}/reviews`, data),
   respond: (reviewId: number, data: any) => 
     api.post(`/reviews/${reviewId}/respond`, data),
 };
 
 export const favoritesApi = {
   getAll: () => api.get('/favorites'),
+  list: () => api.get('/favorites'),
+  add: (masterProfileId: number) => 
+    api.post(`/favorites/${masterProfileId}/toggle`),
+  remove: (masterProfileId: number) => 
+    api.post(`/favorites/${masterProfileId}/toggle`),
   toggle: (masterProfileId: number) => 
     api.post(`/favorites/${masterProfileId}/toggle`),
   check: (masterProfileId: number) => 

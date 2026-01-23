@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import Image from 'next/image';
 import { MapPin, Star, Phone, MessageCircle, Heart, Share2 } from 'lucide-react';
-import { mastersApi, reviewsApi } from '@/lib/api';
+import { mastersApi, reviewsApi, favoritesApi } from '@/lib/api';
 import { useAuthStore } from '@/store/authStore';
 
 export default function MasterProfilePage() {
@@ -38,13 +38,8 @@ export default function MasterProfilePage() {
     }
 
     try {
-      if (isFavorite) {
-        await favoritesApi.remove(parseInt(params.id as string));
-        setIsFavorite(false);
-      } else {
-        await favoritesApi.add(parseInt(params.id as string));
-        setIsFavorite(true);
-      }
+      await favoritesApi.toggle(parseInt(params.id as string));
+      setIsFavorite(!isFavorite);
     } catch (error) {
       console.error('Error toggling favorite:', error);
       alert('Помилка при додаванні в улюблені');

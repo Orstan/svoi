@@ -1,12 +1,45 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import { Heart, MapPin, Star } from 'lucide-react';
+import { favoritesApi } from '@/lib/api';
+import { useAuthStore } from '@/store/authStore';
 
 export default function FavoritesPage() {
-  const [favorites] = useState<any[]>([]);
+  const { isAuthenticated } = useAuthStore();
+  const [favorites, setFavorites] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      loadFavorites();
+    } else {
+      setLoading(false);
+    }
+  }, [isAuthenticated]);
+
+  const loadFavorites = async () => {
+    try {
+      const response = await favoritesApi.list();
+      setFavorites(response.data || []);
+    } catch (error) {
+      console.error('Error loading favorites:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleRemoveFavorite = async (masterId: number) => {
+    try {
+      await favoritesApi.toggle(masterId);
+      setFavorites(favorites.filter(f => f.id !== masterId));
+    } catch (error) {
+      console.error('Error removing favorite:', error);
+      alert('Помилка при видаленні');
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -18,11 +51,7 @@ export default function FavoritesPage() {
             Улюблені майстри
           </h1>
 
-          {loading ? (
-            <div className="flex justify-center py-12">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
-            </div>
-          ) : favorites.length === 0 ? (
+          {favorites.length === 0 ? (
             <div className="bg-white rounded-lg shadow-sm p-12 text-center">
               <Heart size={64} className="mx-auto mb-4 text-gray-300" />
               <h2 className="text-xl font-semibold text-gray-900 mb-2">
@@ -41,52 +70,40 @@ export default function FavoritesPage() {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {favorites.map((master) => (
-                <div
+                <Link
                   key={master.id}
+                  href={`/masters/${master.id}`}
                   className="bg-white rounded-lg shadow-sm hover:shadow-md transition overflow-hidden"
                 >
-                  <Link href={`/masters/${master.id}`}>
-                    <div className="aspect-video bg-gradient-to-br from-primary-100 to-secondary-100 relative">
-                      {master.avatar && (
-                        <img
-                          src={master.avatar}
-                          alt={master.name}
-                          className="w-full h-full object-cover"
-                        />
-                      )}
-                    </div>
-                  </Link>
+                  <div className="aspect-video bg-gradient-to-br from-primary-100 to-secondary-100 relative">
+                    <button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleRemoveFavorite(master.id);
+                      }}
+                      className="absolute top-2 right-2 bg-white p-2 rounded-full shadow-md hover:bg-gray-50 transition"
+                      title="Видалити з улюблених"
+                    >
+                      <Heart size={20} className="text-red-500 fill-current" />
+                    </button>
+                  </div>
 
                   <div className="p-4">
-                    <div className="flex items-start justify-between mb-2">
-                      <Link href={`/masters/${master.id}`}>
-                        <h3 className="text-lg font-semibold text-gray-900 hover:text-primary-600">
-                          {master.name}
-                        </h3>
-                      </Link>
-                      <button
-                        onClick={() => handleRemoveFavorite(master.id)}
-                        className="p-1 hover:bg-gray-100 rounded-full transition"
-                        title="Видалити з улюблених"
-                      >
-                        <Heart size={20} className="text-red-500 fill-current" />
-                      </button>
-                    </div>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                      {master.name}
+                    </h3>
 
                     <div className="flex items-center text-sm text-gray-600 mb-2">
                       <MapPin size={16} className="mr-1" />
-                      {master.city || 'Польща'}
+                      {master.location}
                     </div>
 
                     <div className="flex items-center">
                       <Star size={16} className="text-yellow-400 fill-current mr-1" />
-                      <span className="font-medium">{master.rating || '5.0'}</span>
-                      <span className="text-sm text-gray-500 ml-1">
-                        ({master.reviews_count || 0} відгуків)
-                      </span>
+                      <span className="font-medium">{master.rating}</span>
                     </div>
                   </div>
-                </div>
+                </Link>
               ))}
             </div>
           )}
