@@ -21,17 +21,35 @@ export default function LoginPage() {
     setError('');
 
     try {
+      // ТЕСТОВИЙ РЕЖИМ - поки API не підключено
+      if (formData.email === 'test@test.com' && formData.password === 'test123') {
+        const testToken = 'test-token-' + Date.now();
+        const testUser = {
+          id: 1,
+          name: 'Тестовий Користувач',
+          email: formData.email,
+          role: 'user',
+        };
+        
+        localStorage.setItem('auth_token', testToken);
+        localStorage.setItem('test_user', JSON.stringify(testUser));
+        document.cookie = `auth_token=${testToken}; path=/; max-age=2592000`;
+        
+        router.push('/profile');
+        return;
+      }
+
+      // Спроба реального входу через API
       await login(formData.email, formData.password);
       
-      // Зберігаємо токен в cookies для middleware
       const token = localStorage.getItem('auth_token');
       if (token) {
-        document.cookie = `auth_token=${token}; path=/; max-age=2592000`; // 30 днів
+        document.cookie = `auth_token=${token}; path=/; max-age=2592000`;
       }
       
       router.push('/profile');
     } catch (err: any) {
-      setError(err?.response?.data?.message || 'Помилка входу. Перевірте дані.');
+      setError(err?.response?.data?.message || 'Помилка входу. Спробуйте test@test.com / test123 для демо');
     } finally {
       setLoading(false);
     }
@@ -62,12 +80,6 @@ export default function LoginPage() {
               {error}
             </div>
           )}
-
-          <div className="bg-blue-50 border border-blue-200 text-blue-800 px-4 py-3 rounded text-sm">
-            <strong>Тестовий акаунт:</strong><br />
-            Email: test@test.com<br />
-            Пароль: test123
-          </div>
 
           <div className="rounded-md shadow-sm space-y-4">
             <div>

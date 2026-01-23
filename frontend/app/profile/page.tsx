@@ -1,21 +1,58 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { User, Settings, Heart, Star, LogOut, Edit } from 'lucide-react';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import Link from 'next/link';
+import { useAuthStore } from '@/store/authStore';
 
 export default function ProfilePage() {
+  const router = useRouter();
+  const { user, isAuthenticated, logout, checkAuth } = useAuthStore();
   const [activeTab, setActiveTab] = useState('info');
   const [isEditing, setIsEditing] = useState(false);
   
+  // Завантажуємо дані користувача з authStore або тестових даних
   const [userData, setUserData] = useState({
-    name: 'Іван Петренко',
-    email: 'ivan@example.com',
+    name: user?.name || '',
+    email: user?.email || '',
     phone: '+48 123 456 789',
     location: 'Warszawa',
     avatar: '👤',
   });
+
+  useEffect(() => {
+    // Перевіряємо чи є тестовий користувач
+    const testUser = localStorage.getItem('test_user');
+    if (testUser) {
+      const parsed = JSON.parse(testUser);
+      setUserData({
+        name: parsed.name,
+        email: parsed.email,
+        phone: '+48 123 456 789',
+        location: 'Warszawa',
+        avatar: '👤',
+      });
+    } else if (user) {
+      setUserData({
+        name: user.name,
+        email: user.email,
+        phone: '+48 123 456 789',
+        location: 'Warszawa',
+        avatar: user.avatar || '👤',
+      });
+    } else {
+      // Якщо не авторизований - редірект на login
+      router.push('/login');
+    }
+  }, [user, router]);
+
+  const handleLogout = async () => {
+    localStorage.removeItem('test_user');
+    await logout();
+    router.push('/');
+  };
 
   const handleSave = () => {
     // TODO: Відправка на API
@@ -84,7 +121,7 @@ export default function ProfilePage() {
                 </button>
 
                 <button
-                  onClick={() => alert('Вихід')}
+                  onClick={handleLogout}
                   className="w-full flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-red-50 text-red-600 transition"
                 >
                   <LogOut size={20} />
