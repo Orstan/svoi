@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { MapPin, Star, Search, Filter, ArrowUpDown } from 'lucide-react';
 import { mastersApi, categoriesApi, locationsApi } from '@/lib/api';
 import Breadcrumbs from '@/components/Breadcrumbs';
+import Pagination from '@/components/Pagination';
 
 function MastersContent() {
   const searchParams = useSearchParams();
@@ -14,6 +15,8 @@ function MastersContent() {
   const [voivodeships, setVoivodeships] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [sortBy, setSortBy] = useState('rating');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [perPage, setPerPage] = useState(12);
   const [filters, setFilters] = useState({
     search: searchParams.get('search') || '',
     category: searchParams.get('category') || '',
@@ -23,6 +26,7 @@ function MastersContent() {
 
   useEffect(() => {
     loadData();
+    setCurrentPage(1); // Скидаємо на першу сторінку при зміні фільтрів
   }, [filters, sortBy]);
 
   const loadData = async () => {
@@ -68,27 +72,65 @@ function MastersContent() {
   if (selectedCategory) breadcrumbItems.push({ label: selectedCategory.name });
   if (selectedLocation) breadcrumbItems.push({ label: selectedLocation.name });
 
+  // Пагінація
+  const totalPages = Math.ceil(masters.length / perPage);
+  const startIndex = (currentPage - 1) * perPage;
+  const endIndex = startIndex + perPage;
+  const paginatedMasters = masters.slice(startIndex, endIndex);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <Breadcrumbs items={breadcrumbItems} />
         
-        <div className="flex items-center justify-between mb-6">
-          <h1 className="text-3xl font-bold text-gray-900">Наші майстри</h1>
-          
-          {/* Сортування */}
-          <div className="flex items-center space-x-2">
-            <ArrowUpDown size={20} className="text-gray-600" />
-            <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value)}
-              className="px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500 bg-white"
-            >
-              <option value="rating">За рейтингом</option>
-              <option value="newest">Нові спочатку</option>
-              <option value="name">За алфавітом</option>
-            </select>
+        <div className="mb-6">
+          <div className="flex items-center justify-between mb-4">
+            <h1 className="text-3xl font-bold text-gray-900">Наші майстри</h1>
+            
+            {/* Сортування */}
+            <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-2">
+                <span className="text-sm text-gray-600">Показати:</span>
+                <select
+                  value={perPage}
+                  onChange={(e) => {
+                    setPerPage(Number(e.target.value));
+                    setCurrentPage(1);
+                  }}
+                  className="px-3 py-1 border rounded-lg focus:ring-2 focus:ring-primary-500 bg-white text-sm"
+                >
+                  <option value="12">12</option>
+                  <option value="24">24</option>
+                  <option value="48">48</option>
+                </select>
+              </div>
+              
+              <div className="flex items-center space-x-2">
+                <ArrowUpDown size={20} className="text-gray-600" />
+                <select
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value)}
+                  className="px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500 bg-white"
+                >
+                  <option value="rating">За рейтингом</option>
+                  <option value="newest">Нові спочатку</option>
+                  <option value="name">За алфавітом</option>
+                </select>
+              </div>
+            </div>
           </div>
+          
+          {!loading && masters.length > 0 && (
+            <p className="text-sm text-gray-600">
+              Знайдено {masters.length} майстр{masters.length === 1 ? '' : masters.length < 5 ? 'и' : 'ів'}
+              {totalPages > 1 && ` • Сторінка ${currentPage} з ${totalPages}`}
+            </p>
+          )}
         </div>
 
         {/* Фільтри */}
@@ -167,8 +209,9 @@ function MastersContent() {
             <p className="mt-4 text-gray-600">Завантаження...</p>
           </div>
         ) : masters.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {masters.map((master) => (
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {paginatedMasters.map((master) => (
               <Link
                 key={master.id}
                 href={`/masters/${master.id}`}
@@ -230,8 +273,17 @@ function MastersContent() {
                   </div>
                 </div>
               </Link>
-            ))}
-          </div>
+              ))}
+            </div>
+
+            {totalPages > 1 && (
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
+              />
+            )}
+          </>
         ) : (
           <div className="text-center py-12">
             <p className="text-gray-600 text-lg">Майстрів не знайдено</p>
