@@ -22,8 +22,14 @@ export const metadata: Metadata = {
     description: 'Знайдіть українських майстрів та спеціалістів у Польщі',
     url: 'https://svoi24.pl',
     siteName: 'Свої для Своїх',
-    locale: 'uk_UA',
-    type: 'website',
+    images: [
+      {
+        url: 'https://svoi24.pl/og-image.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'Свої для Своїх',
+      },
+    ],
   },
 };
 
