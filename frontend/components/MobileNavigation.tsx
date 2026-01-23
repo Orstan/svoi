@@ -2,12 +2,21 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Menu, Plus, MessageCircle, User } from 'lucide-react';
+import { useState } from 'react';
+import { Home, Menu, Plus, MessageCircle, User, X } from 'lucide-react';
 
 export default function MobileNavigation() {
   const pathname = usePathname();
+  const [showMenu, setShowMenu] = useState(false);
 
-  const navItems = [
+  const navItems: Array<{
+    name: string;
+    href?: string;
+    icon: any;
+    isSpecial?: boolean;
+    isMenu?: boolean;
+    onClick?: () => void;
+  }> = [
     {
       name: 'Головна',
       href: '/',
@@ -15,8 +24,9 @@ export default function MobileNavigation() {
     },
     {
       name: 'Меню',
-      href: '/categories',
+      onClick: () => setShowMenu(!showMenu),
       icon: Menu,
+      isMenu: true,
     },
     {
       name: 'Додати',
@@ -36,44 +46,98 @@ export default function MobileNavigation() {
     },
   ];
 
+  const menuItems = [
+    { name: 'Майстри', href: '/masters' },
+    { name: 'Категорії', href: '/categories' },
+    { name: 'Як це працює', href: '/how-it-works' },
+    { name: 'Про нас', href: '/about' },
+    { name: 'Контакти', href: '/contact' },
+  ];
+
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-50 md:hidden">
-      <div className="flex items-center justify-around h-16">
-        {navItems.map((item) => {
-          const Icon = item.icon;
-          const isActive = pathname === item.href;
+    <>
+      {/* Випадаюче меню */}
+      {showMenu && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 md:hidden" onClick={() => setShowMenu(false)}>
+          <div className="fixed bottom-16 left-0 right-0 bg-white rounded-t-2xl shadow-xl p-6 animate-slide-up" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-bold">Меню</h3>
+              <button onClick={() => setShowMenu(false)} className="p-2 hover:bg-gray-100 rounded-lg">
+                <X size={20} />
+              </button>
+            </div>
+            <nav className="space-y-2">
+              {menuItems.map((item) => (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  onClick={() => setShowMenu(false)}
+                  className="block px-4 py-3 rounded-lg hover:bg-gray-100 transition"
+                >
+                  {item.name}
+                </Link>
+              ))}
+            </nav>
+          </div>
+        </div>
+      )}
 
-          if (item.isSpecial) {
-            return (
-              <Link
-                key={item.name}
-                href={item.href}
-                className="flex flex-col items-center justify-center -mt-8"
-              >
-                <div className="bg-gradient-to-r from-primary-600 to-secondary-600 text-white rounded-full p-4 shadow-lg hover:shadow-xl transition">
-                  <Icon size={24} strokeWidth={2.5} />
-                </div>
-              </Link>
-            );
-          }
+      {/* Нижня навігація */}
+      <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-50 md:hidden">
+        <div className="flex items-center justify-around h-16">
+          {navItems.map((item) => {
+            const Icon = item.icon;
+            const isActive = pathname === item.href;
 
-          return (
-            <Link
-              key={item.name}
-              href={item.href}
-              className={`
-                flex flex-col items-center justify-center flex-1 h-full transition
-                ${isActive ? 'text-primary-600' : 'text-gray-600'}
-              `}
-            >
-              <Icon size={22} strokeWidth={isActive ? 2.5 : 2} />
-              <span className={`text-xs mt-1 ${isActive ? 'font-semibold' : ''}`}>
-                {item.name}
-              </span>
-            </Link>
-          );
-        })}
-      </div>
-    </nav>
+            if (item.isSpecial && item.href) {
+              return (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  className="flex flex-col items-center justify-center -mt-8"
+                >
+                  <div className="bg-gradient-to-r from-primary-600 to-secondary-600 text-white rounded-full p-4 shadow-lg hover:shadow-xl transition">
+                    <Icon size={24} strokeWidth={2.5} />
+                  </div>
+                </Link>
+              );
+            }
+
+            if (item.isMenu) {
+              return (
+                <button
+                  key={item.name}
+                  onClick={item.onClick}
+                  className="flex flex-col items-center justify-center flex-1 h-full transition text-gray-600"
+                >
+                  <Icon size={22} strokeWidth={2} />
+                  <span className="text-xs mt-1">{item.name}</span>
+                </button>
+              );
+            }
+
+            if (item.href) {
+              return (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  className={`
+                    flex flex-col items-center justify-center flex-1 h-full transition
+                    ${isActive ? 'text-primary-600' : 'text-gray-600'}
+                  `}
+                >
+                  <Icon size={22} strokeWidth={isActive ? 2.5 : 2} />
+                  <span className={`text-xs mt-1 ${isActive ? 'font-semibold' : ''}`}>
+                    {item.name}
+                  </span>
+                </Link>
+              );
+            }
+            
+            return null;
+          })}
+        </div>
+      </nav>
+    </>
   );
 }

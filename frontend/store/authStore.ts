@@ -34,6 +34,8 @@ export const useAuthStore = create<AuthState>((set) => ({
       const { user, token } = response.data;
       
       localStorage.setItem('auth_token', token);
+      // Зберігаємо в cookies для middleware
+      document.cookie = `auth_token=${token}; path=/; max-age=2592000`; // 30 днів
       set({ user, token, isAuthenticated: true });
     } catch (error) {
       throw error;
@@ -46,6 +48,8 @@ export const useAuthStore = create<AuthState>((set) => ({
       const { user, token } = response.data;
       
       localStorage.setItem('auth_token', token);
+      // Зберігаємо в cookies для middleware
+      document.cookie = `auth_token=${token}; path=/; max-age=2592000`; // 30 днів
       set({ user, token, isAuthenticated: true });
     } catch (error) {
       throw error;
@@ -59,6 +63,8 @@ export const useAuthStore = create<AuthState>((set) => ({
       console.error('Logout error:', error);
     } finally {
       localStorage.removeItem('auth_token');
+      // Видаляємо з cookies
+      document.cookie = 'auth_token=; path=/; max-age=0';
       set({ user: null, token: null, isAuthenticated: false });
     }
   },

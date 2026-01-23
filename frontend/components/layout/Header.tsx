@@ -93,12 +93,7 @@ export function Header() {
             </Link>
           </div>
 
-          <button
-            className="md:hidden"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          >
-            {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
+          {/* Мобільне меню прибрано, використовується нижня навігація */}
         </div>
       </div>
 

@@ -17,14 +17,21 @@ export default function LoginPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
     setLoading(true);
+    setError('');
 
     try {
       await login(formData.email, formData.password);
+      
+      // Зберігаємо токен в cookies для middleware
+      const token = localStorage.getItem('auth_token');
+      if (token) {
+        document.cookie = `auth_token=${token}; path=/; max-age=2592000`; // 30 днів
+      }
+      
       router.push('/profile');
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Помилка входу');
+      setError(err?.response?.data?.message || 'Помилка входу. Перевірте дані.');
     } finally {
       setLoading(false);
     }
