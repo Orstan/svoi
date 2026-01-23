@@ -3,7 +3,7 @@
 import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { MapPin, Star, Search, Filter, ArrowUpDown, TrendingUp, Award, Sparkles } from 'lucide-react';
+import { MapPin, Star, Search, Filter, ArrowUpDown, TrendingUp, Award, Sparkles, ChevronDown, ChevronUp } from 'lucide-react';
 import { mastersApi, categoriesApi, locationsApi } from '@/lib/api';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import Pagination from '@/components/Pagination';
@@ -18,6 +18,7 @@ function MastersContent() {
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage, setPerPage] = useState(12);
   const [quickFilter, setQuickFilter] = useState<'all' | 'top' | 'pro' | 'new'>('all');
+  const [showFilters, setShowFilters] = useState(true);
   const [filters, setFilters] = useState({
     search: searchParams.get('search') || '',
     category: searchParams.get('category') || '',
@@ -207,8 +208,31 @@ function MastersContent() {
         </div>
 
         {/* Фільтри */}
-        <div className="bg-white p-6 rounded-lg shadow-sm mb-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="bg-white rounded-lg shadow-sm mb-8">
+          <button
+            onClick={() => setShowFilters(!showFilters)}
+            className="w-full flex items-center justify-between p-6 hover:bg-gray-50 transition"
+          >
+            <div className="flex items-center space-x-2">
+              <Filter size={20} className="text-gray-600" />
+              <h3 className="text-lg font-semibold text-gray-900">Фільтри пошуку</h3>
+              {!showFilters && (
+                <span className="text-sm text-gray-500">
+                  {[
+                    filters.search && 'пошук',
+                    filters.category && 'категорія', 
+                    filters.location && 'локація',
+                    filters.verified && 'верифіковані'
+                  ].filter(Boolean).join(', ') || 'не обрано'}
+                </span>
+              )}
+            </div>
+            {showFilters ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+          </button>
+          
+          {showFilters && (
+            <div className="p-6 pt-0 border-t">
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Пошук
@@ -272,7 +296,9 @@ function MastersContent() {
                 <span className="text-sm text-gray-700">Тільки верифіковані</span>
               </label>
             </div>
-          </div>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Список майстрів */}
