@@ -47,22 +47,22 @@ export default function FavoritesPage() {
         <Breadcrumbs items={[{ label: 'Улюблені' }]} />
 
         <div className="mt-6">
-          <h1 className="text-3xl font-bold text-gray-900 mb-6">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4 sm:mb-6">
             Улюблені майстри
           </h1>
 
           {favorites.length === 0 ? (
-            <div className="bg-white rounded-lg shadow-sm p-12 text-center">
-              <Heart size={64} className="mx-auto mb-4 text-gray-300" />
-              <h2 className="text-xl font-semibold text-gray-900 mb-2">
+            <div className="bg-white rounded-lg shadow-sm p-6 sm:p-12 text-center">
+              <Heart size={48} className="sm:w-16 sm:h-16 mx-auto mb-3 sm:mb-4 text-gray-300" />
+              <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2">
                 У вас ще немає улюблених майстрів
               </h2>
-              <p className="text-gray-600 mb-6">
+              <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6">
                 Додайте майстрів до улюблених, щоб швидко знаходити їх пізніше
               </p>
               <Link
                 href="/masters"
-                className="inline-block bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition font-semibold"
+                className="inline-block bg-primary-600 text-white px-5 sm:px-6 py-2.5 sm:py-3 rounded-lg hover:bg-primary-700 transition font-semibold text-sm sm:text-base"
               >
                 Переглянути майстрів
               </Link>

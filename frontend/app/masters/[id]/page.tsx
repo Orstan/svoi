@@ -66,9 +66,9 @@ export default function MasterProfilePage() {
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
-        <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
-          <div className="flex flex-col md:flex-row gap-6">
-            <div className="w-32 h-32 rounded-full bg-gradient-to-br from-primary-100 to-secondary-100 flex-shrink-0 overflow-hidden">
+        <div className="bg-white rounded-lg shadow-sm p-4 sm:p-6 mb-6">
+          <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
+            <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-full bg-gradient-to-br from-primary-100 to-secondary-100 flex-shrink-0 overflow-hidden mx-auto sm:mx-0">
               {master.user?.avatar && (
                 <img
                   src={master.user.avatar}
@@ -79,61 +79,61 @@ export default function MasterProfilePage() {
             </div>
 
             <div className="flex-1">
-              <div className="flex items-start justify-between">
-                <div>
-                  <h1 className="text-3xl font-bold text-gray-900 mb-2">
+              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
+                <div className="text-center sm:text-left">
+                  <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
                     {master.user?.name}
                   </h1>
-                  <div className="flex items-center text-gray-600 mb-3">
-                    <MapPin size={18} className="mr-2" />
-                    {master.location?.name_uk}
+                  <div className="flex items-center justify-center sm:justify-start text-gray-600 mb-3">
+                    <MapPin size={16} className="sm:w-[18px] sm:h-[18px] mr-2" />
+                    <span className="text-sm sm:text-base">{master.location?.name_uk}</span>
                   </div>
                   {master.rating > 0 && (
-                    <div className="flex items-center mb-4">
-                      <Star size={20} className="text-yellow-400 fill-current mr-2" />
-                      <span className="text-xl font-semibold">{master.rating.toFixed(1)}</span>
-                      <span className="text-gray-500 ml-2">
+                    <div className="flex items-center justify-center sm:justify-start mb-4">
+                      <Star size={18} className="sm:w-5 sm:h-5 text-yellow-400 fill-current mr-2" />
+                      <span className="text-lg sm:text-xl font-semibold">{master.rating.toFixed(1)}</span>
+                      <span className="text-gray-500 ml-2 text-sm sm:text-base">
                         ({master.reviews_count} відгуків)
                       </span>
                     </div>
                   )}
                 </div>
 
-                <div className="flex gap-2">
+                <div className="flex gap-2 justify-center sm:justify-start">
                   <button className="p-2 border rounded-lg hover:bg-gray-50">
-                    <Heart size={20} />
+                    <Heart size={18} className="sm:w-5 sm:h-5" />
                   </button>
                   <button className="p-2 border rounded-lg hover:bg-gray-50">
-                    <Share2 size={20} />
+                    <Share2 size={18} className="sm:w-5 sm:h-5" />
                   </button>
                 </div>
               </div>
 
-              <div className="flex flex-wrap gap-2 mb-4">
+              <div className="flex flex-wrap justify-center sm:justify-start gap-2 mb-4">
                 {master.is_verified && (
-                  <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">
+                  <span className="bg-green-100 text-green-800 px-2.5 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-medium">
                     ✓ Верифікований
                   </span>
                 )}
                 {master.is_pro && (
-                  <span className="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm font-medium">
+                  <span className="bg-yellow-100 text-yellow-800 px-2.5 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-medium">
                     ⭐ PRO
                   </span>
                 )}
-                <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">
+                <span className="bg-blue-100 text-blue-800 px-2.5 sm:px-3 py-1 rounded-full text-xs sm:text-sm">
                   Досвід: {master.experience_years} років
                 </span>
               </div>
 
-              <div className="flex gap-3">
+              <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
                 {master.whatsapp_link && (
                   <a
                     href={master.whatsapp_link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition font-medium"
+                    className="flex items-center justify-center gap-2 bg-green-600 text-white px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg hover:bg-green-700 transition font-medium text-sm sm:text-base"
                   >
-                    <MessageCircle size={20} />
+                    <MessageCircle size={18} className="sm:w-5 sm:h-5" />
                     WhatsApp
                   </a>
                 )}
@@ -142,9 +142,9 @@ export default function MasterProfilePage() {
                     href={master.telegram_link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition font-medium"
+                    className="flex items-center justify-center gap-2 bg-blue-600 text-white px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg hover:bg-blue-700 transition font-medium text-sm sm:text-base"
                   >
-                    <MessageCircle size={20} />
+                    <MessageCircle size={18} className="sm:w-5 sm:h-5" />
                     Telegram
                   </a>
                 )}

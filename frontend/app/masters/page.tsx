@@ -104,72 +104,73 @@ function MastersContent() {
         <Breadcrumbs items={breadcrumbItems} />
         
         {/* Швидкі фільтри */}
-        <div className="flex items-center space-x-3 mb-6">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-6">
           <button
             onClick={() => setQuickFilter('all')}
             className={`
-              flex items-center space-x-2 px-4 py-2 rounded-lg font-medium transition
+              flex items-center space-x-1 sm:space-x-2 px-3 sm:px-4 py-2 rounded-lg font-medium transition text-sm sm:text-base
               ${quickFilter === 'all' 
                 ? 'bg-primary-600 text-white' 
                 : 'bg-white border hover:border-primary-300'
               }
             `}
           >
-            <Filter size={18} />
+            <Filter size={16} className="sm:w-[18px] sm:h-[18px]" />
             <span>Всі</span>
           </button>
           
           <button
             onClick={() => setQuickFilter('top')}
             className={`
-              flex items-center space-x-2 px-4 py-2 rounded-lg font-medium transition
+              flex items-center space-x-1 sm:space-x-2 px-3 sm:px-4 py-2 rounded-lg font-medium transition text-sm sm:text-base
               ${quickFilter === 'top' 
                 ? 'bg-yellow-500 text-white' 
                 : 'bg-white border hover:border-yellow-300'
               }
             `}
           >
-            <Award size={18} />
-            <span>ТОП (4.5★+)</span>
+            <Award size={16} className="sm:w-[18px] sm:h-[18px]" />
+            <span className="hidden xs:inline">ТОП (4.5★+)</span>
+            <span className="xs:hidden">ТОП</span>
           </button>
           
           <button
             onClick={() => setQuickFilter('pro')}
             className={`
-              flex items-center space-x-2 px-4 py-2 rounded-lg font-medium transition
+              flex items-center space-x-1 sm:space-x-2 px-3 sm:px-4 py-2 rounded-lg font-medium transition text-sm sm:text-base
               ${quickFilter === 'pro' 
                 ? 'bg-purple-600 text-white' 
                 : 'bg-white border hover:border-purple-300'
               }
             `}
           >
-            <TrendingUp size={18} />
+            <TrendingUp size={16} className="sm:w-[18px] sm:h-[18px]" />
             <span>PRO</span>
           </button>
           
           <button
             onClick={() => setQuickFilter('new')}
             className={`
-              flex items-center space-x-2 px-4 py-2 rounded-lg font-medium transition
+              flex items-center space-x-1 sm:space-x-2 px-3 sm:px-4 py-2 rounded-lg font-medium transition text-sm sm:text-base
               ${quickFilter === 'new' 
                 ? 'bg-green-600 text-white' 
                 : 'bg-white border hover:border-green-300'
               }
             `}
           >
-            <Sparkles size={18} />
+            <Sparkles size={16} className="sm:w-[18px] sm:h-[18px]" />
             <span>Нові</span>
           </button>
         </div>
         
         <div className="mb-6">
-          <div className="flex items-center justify-between mb-4">
-            <h1 className="text-3xl font-bold text-gray-900">Наші майстри</h1>
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Наші майстри</h1>
             
             {/* Сортування */}
-            <div className="flex items-center space-x-4">
+            <div className="flex flex-wrap items-center gap-3 sm:gap-4">
               <div className="flex items-center space-x-2">
-                <span className="text-sm text-gray-600">Показати:</span>
+                <span className="text-sm text-gray-600 hidden sm:inline">Показати:</span>
                 <select
                   value={perPage}
                   onChange={(e) => {
@@ -185,11 +186,11 @@ function MastersContent() {
               </div>
               
               <div className="flex items-center space-x-2">
-                <ArrowUpDown size={20} className="text-gray-600" />
+                <ArrowUpDown size={18} className="text-gray-600 hidden sm:block" />
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value)}
-                  className="px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500 bg-white"
+                  className="px-3 sm:px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500 bg-white text-sm sm:text-base"
                 >
                   <option value="rating">За рейтингом</option>
                   <option value="newest">Нові спочатку</option>
