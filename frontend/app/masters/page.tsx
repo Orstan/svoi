@@ -3,7 +3,7 @@
 import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { MapPin, Star, Search, Filter, ArrowUpDown } from 'lucide-react';
+import { MapPin, Star, Search, Filter, ArrowUpDown, TrendingUp, Award, Sparkles } from 'lucide-react';
 import { mastersApi, categoriesApi, locationsApi } from '@/lib/api';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import Pagination from '@/components/Pagination';
@@ -17,6 +17,7 @@ function MastersContent() {
   const [sortBy, setSortBy] = useState('rating');
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage, setPerPage] = useState(12);
+  const [quickFilter, setQuickFilter] = useState<'all' | 'top' | 'pro' | 'new'>('all');
   const [filters, setFilters] = useState({
     search: searchParams.get('search') || '',
     category: searchParams.get('category') || '',
@@ -27,7 +28,7 @@ function MastersContent() {
   useEffect(() => {
     loadData();
     setCurrentPage(1); // Скидаємо на першу сторінку при зміні фільтрів
-  }, [filters, sortBy]);
+  }, [filters, sortBy, quickFilter]);
 
   const loadData = async () => {
     setLoading(true);
@@ -38,6 +39,19 @@ function MastersContent() {
         locationsApi.voivodeships(),
       ]);
       let mastersData = mastersRes.data.data || [];
+      
+      // Швидкі фільтри
+      if (quickFilter === 'top') {
+        mastersData = mastersData.filter((m: any) => (m.rating || 0) >= 4.5);
+      } else if (quickFilter === 'pro') {
+        mastersData = mastersData.filter((m: any) => m.is_pro);
+      } else if (quickFilter === 'new') {
+        const thirtyDaysAgo = new Date();
+        thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+        mastersData = mastersData.filter((m: any) => 
+          new Date(m.created_at) > thirtyDaysAgo
+        );
+      }
       
       // Сортування
       if (sortBy === 'rating') {
@@ -87,6 +101,65 @@ function MastersContent() {
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <Breadcrumbs items={breadcrumbItems} />
+        
+        {/* Швидкі фільтри */}
+        <div className="flex items-center space-x-3 mb-6">
+          <button
+            onClick={() => setQuickFilter('all')}
+            className={`
+              flex items-center space-x-2 px-4 py-2 rounded-lg font-medium transition
+              ${quickFilter === 'all' 
+                ? 'bg-primary-600 text-white' 
+                : 'bg-white border hover:border-primary-300'
+              }
+            `}
+          >
+            <Filter size={18} />
+            <span>Всі</span>
+          </button>
+          
+          <button
+            onClick={() => setQuickFilter('top')}
+            className={`
+              flex items-center space-x-2 px-4 py-2 rounded-lg font-medium transition
+              ${quickFilter === 'top' 
+                ? 'bg-yellow-500 text-white' 
+                : 'bg-white border hover:border-yellow-300'
+              }
+            `}
+          >
+            <Award size={18} />
+            <span>ТОП (4.5★+)</span>
+          </button>
+          
+          <button
+            onClick={() => setQuickFilter('pro')}
+            className={`
+              flex items-center space-x-2 px-4 py-2 rounded-lg font-medium transition
+              ${quickFilter === 'pro' 
+                ? 'bg-purple-600 text-white' 
+                : 'bg-white border hover:border-purple-300'
+              }
+            `}
+          >
+            <TrendingUp size={18} />
+            <span>PRO</span>
+          </button>
+          
+          <button
+            onClick={() => setQuickFilter('new')}
+            className={`
+              flex items-center space-x-2 px-4 py-2 rounded-lg font-medium transition
+              ${quickFilter === 'new' 
+                ? 'bg-green-600 text-white' 
+                : 'bg-white border hover:border-green-300'
+              }
+            `}
+          >
+            <Sparkles size={18} />
+            <span>Нові</span>
+          </button>
+        </div>
         
         <div className="mb-6">
           <div className="flex items-center justify-between mb-4">
