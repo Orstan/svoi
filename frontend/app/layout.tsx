@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
+import MobileNavigation from '@/components/MobileNavigation';
 
 const inter = Inter({ subsets: ['latin', 'cyrillic'] });
 
@@ -33,8 +34,9 @@ export default function RootLayout({
     <html lang="uk">
       <body className={inter.className}>
         <Header />
-        <main className="min-h-screen">{children}</main>
+        <main className="min-h-screen pb-20 md:pb-0">{children}</main>
         <Footer />
+        <MobileNavigation />
       </body>
     </html>
   );
