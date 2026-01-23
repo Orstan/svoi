@@ -1,12 +1,15 @@
 import axios from 'axios';
+import { mockMasters, mockCategories, mockVoivodeships } from './mockData';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api/v1';
+const USE_MOCK_DATA = process.env.NEXT_PUBLIC_USE_MOCK === 'true';
 
 export const api = axios.create({
   baseURL: API_URL,
   headers: {
     'Content-Type': 'application/json',
   },
+  timeout: 5000, // 5 секунд timeout
 });
 
 api.interceptors.request.use((config) => {
@@ -21,6 +24,28 @@ api.interceptors.request.use((config) => {
   }
   return config;
 });
+
+// Interceptor для fallback на mock дані
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (USE_MOCK_DATA || !error.response) {
+      // Якщо backend недоступний - використовуємо mock дані
+      const url = error.config?.url || '';
+      
+      if (url.includes('/masters')) {
+        return Promise.resolve({ data: mockMasters });
+      }
+      if (url.includes('/categories')) {
+        return Promise.resolve({ data: mockCategories });
+      }
+      if (url.includes('/locations/voivodeships')) {
+        return Promise.resolve({ data: mockVoivodeships });
+      }
+    }
+    return Promise.reject(error);
+  }
+);
 
 export const authApi = {
   register: (data: any) => api.post('/register', data),

@@ -2,11 +2,22 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ['localhost', 'svoi24.pl', 'api.svoi24.pl'],
     remotePatterns: [
       {
         protocol: 'https',
         hostname: '**.amazonaws.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'svoi24.pl',
+      },
+      {
+        protocol: 'https',
+        hostname: 'api.svoi24.pl',
+      },
+      {
+        protocol: 'http',
+        hostname: 'localhost',
       },
     ],
   },
