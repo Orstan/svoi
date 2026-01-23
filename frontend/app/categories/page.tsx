@@ -39,7 +39,7 @@ export default function CategoriesPage() {
                 <div className="flex items-center mb-4">
                   <span className="text-4xl mr-4">{category.icon}</span>
                   <h2 className="text-xl font-semibold text-gray-900">
-                    {category.name_uk}
+                    {category.name}
                   </h2>
                 </div>
 
@@ -51,7 +51,7 @@ export default function CategoriesPage() {
                         href={`/masters?category=${subcategory.id}`}
                         className="block text-gray-700 hover:text-primary-600 transition"
                       >
-                        → {subcategory.name_uk}
+                        → {subcategory.name}
                       </Link>
                     ))}
                   </div>
