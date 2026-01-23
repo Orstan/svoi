@@ -63,6 +63,12 @@ export default function LoginPage() {
             </div>
           )}
 
+          <div className="bg-blue-50 border border-blue-200 text-blue-800 px-4 py-3 rounded text-sm">
+            <strong>Тестовий акаунт:</strong><br />
+            Email: test@test.com<br />
+            Пароль: test123
+          </div>
+
           <div className="rounded-md shadow-sm space-y-4">
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
