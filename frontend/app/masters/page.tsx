@@ -3,8 +3,9 @@
 import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { MapPin, Star, Search, Filter } from 'lucide-react';
+import { MapPin, Star, Search, Filter, ArrowUpDown } from 'lucide-react';
 import { mastersApi, categoriesApi, locationsApi } from '@/lib/api';
+import Breadcrumbs from '@/components/Breadcrumbs';
 
 function MastersContent() {
   const searchParams = useSearchParams();
@@ -12,6 +13,7 @@ function MastersContent() {
   const [categories, setCategories] = useState<any[]>([]);
   const [voivodeships, setVoivodeships] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [sortBy, setSortBy] = useState('rating');
   const [filters, setFilters] = useState({
     search: searchParams.get('search') || '',
     category: searchParams.get('category') || '',
@@ -21,7 +23,7 @@ function MastersContent() {
 
   useEffect(() => {
     loadData();
-  }, [filters]);
+  }, [filters, sortBy]);
 
   const loadData = async () => {
     setLoading(true);
@@ -31,7 +33,22 @@ function MastersContent() {
         categoriesApi.list(),
         locationsApi.voivodeships(),
       ]);
-      setMasters(mastersRes.data.data || []);
+      let mastersData = mastersRes.data.data || [];
+      
+      // Сортування
+      if (sortBy === 'rating') {
+        mastersData = mastersData.sort((a: any, b: any) => (b.rating || 0) - (a.rating || 0));
+      } else if (sortBy === 'newest') {
+        mastersData = mastersData.sort((a: any, b: any) => 
+          new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+        );
+      } else if (sortBy === 'name') {
+        mastersData = mastersData.sort((a: any, b: any) => 
+          (a.user?.name || '').localeCompare(b.user?.name || '')
+        );
+      }
+      
+      setMasters(mastersData);
       setCategories(categoriesRes.data || []);
       setVoivodeships(locationsRes.data || []);
     } catch (error) {
@@ -42,10 +59,37 @@ function MastersContent() {
     }
   };
 
+  const selectedCategory = categories.find(c => c.id === Number(filters.category));
+  const selectedLocation = voivodeships.find(v => v.id === Number(filters.location));
+
+  const breadcrumbItems: Array<{label: string; href?: string}> = [
+    { label: 'Майстри', href: '/masters' },
+  ];
+  if (selectedCategory) breadcrumbItems.push({ label: selectedCategory.name });
+  if (selectedLocation) breadcrumbItems.push({ label: selectedLocation.name });
+
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-8">Наші майстри</h1>
+        <Breadcrumbs items={breadcrumbItems} />
+        
+        <div className="flex items-center justify-between mb-6">
+          <h1 className="text-3xl font-bold text-gray-900">Наші майстри</h1>
+          
+          {/* Сортування */}
+          <div className="flex items-center space-x-2">
+            <ArrowUpDown size={20} className="text-gray-600" />
+            <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
+              className="px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500 bg-white"
+            >
+              <option value="rating">За рейтингом</option>
+              <option value="newest">Нові спочатку</option>
+              <option value="name">За алфавітом</option>
+            </select>
+          </div>
+        </div>
 
         {/* Фільтри */}
         <div className="bg-white p-6 rounded-lg shadow-sm mb-8">
