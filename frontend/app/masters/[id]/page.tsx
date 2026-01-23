@@ -13,6 +13,7 @@ export default function MasterProfilePage() {
   const [master, setMaster] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('about');
+  const [isFavorite, setIsFavorite] = useState(false);
 
   useEffect(() => {
     loadMaster();
@@ -22,10 +23,31 @@ export default function MasterProfilePage() {
     try {
       const response = await mastersApi.show(params.id as string);
       setMaster(response.data);
+      setIsFavorite(response.data.is_favorite);
     } catch (error) {
       console.error('Error loading master:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleToggleFavorite = async () => {
+    if (!isAuthenticated) {
+      alert('Увійдіть для додавання в улюблені');
+      return;
+    }
+
+    try {
+      if (isFavorite) {
+        await favoritesApi.remove(parseInt(params.id as string));
+        setIsFavorite(false);
+      } else {
+        await favoritesApi.add(parseInt(params.id as string));
+        setIsFavorite(true);
+      }
+    } catch (error) {
+      console.error('Error toggling favorite:', error);
+      alert('Помилка при додаванні в улюблені');
     }
   };
 

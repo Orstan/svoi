@@ -2,13 +2,37 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { Search, Menu, X, User, Heart } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
 
 export function Header() {
+  const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { isAuthenticated, user, logout } = useAuthStore();
+  const [currentUser, setCurrentUser] = useState<any>(null);
+
+  useEffect(() => {
+    // Перевіряємо тестового користувача
+    const testUser = localStorage.getItem('test_user');
+    const testToken = localStorage.getItem('auth_token');
+    
+    if (testUser && testToken) {
+      setCurrentUser(JSON.parse(testUser));
+    } else if (user) {
+      setCurrentUser(user);
+    } else {
+      setCurrentUser(null);
+    }
+  }, [user]);
+
+  const handleLogout = async () => {
+    localStorage.removeItem('test_user');
+    await logout();
+    setCurrentUser(null);
+    router.push('/');
+  };
 
   return (
     <header className="bg-white shadow-sm sticky top-0 z-50">

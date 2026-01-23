@@ -1,0 +1,22 @@
+# Svoi24.pl - Українські майстри в Польщі
+
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /admin/
+Disallow: /dashboard/
+Disallow: /profile/
+Disallow: /messages/
+
+# Sitemap
+Sitemap: https://svoi24.pl/sitemap.xml
+
+# Популярні боти
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Yandex
+Allow: /
