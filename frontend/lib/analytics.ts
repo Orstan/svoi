@@ -6,7 +6,7 @@ declare global {
   }
 }
 
-export const GA_TRACKING_ID = process.env.NEXT_PUBLIC_GA_ID || '';
+export const GA_TRACKING_ID = process.env.NEXT_PUBLIC_GA_ID || 'G-F9FMC86X6L';
 
 // https://developers.google.com/analytics/devguides/collection/gtagjs/pages
 export const pageview = (url: string) => {

@@ -27,11 +27,6 @@ export const metadata: Metadata = {
     statusBarStyle: 'default',
     title: 'Svoi24',
   },
-  viewport: {
-    width: 'device-width',
-    initialScale: 1,
-    maximumScale: 1,
-  },
   openGraph: {
     type: 'website',
     locale: 'uk_UA',
@@ -48,6 +43,12 @@ export const metadata: Metadata = {
       },
     ],
   },
+};
+
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
 };
 
 export default function RootLayout({
