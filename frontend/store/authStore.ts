@@ -29,6 +29,7 @@ export const useAuthStore = create<AuthState>((set) => ({
   isAuthenticated: false,
 
   login: async (email: string, password: string) => {
+    set({ isLoading: true });
     try {
       const response = await authApi.login({ email, password });
       const { user, token } = response.data;
@@ -36,7 +37,7 @@ export const useAuthStore = create<AuthState>((set) => ({
       localStorage.setItem('auth_token', token);
       // Зберігаємо в cookies для middleware
       document.cookie = `auth_token=${token}; path=/; max-age=2592000`; // 30 днів
-      set({ user, token, isAuthenticated: true });
+      set({ user, token, isAuthenticated: true, isLoading: false });
     } catch (error) {
       throw error;
     }
@@ -50,7 +51,7 @@ export const useAuthStore = create<AuthState>((set) => ({
       localStorage.setItem('auth_token', token);
       // Зберігаємо в cookies для middleware
       document.cookie = `auth_token=${token}; path=/; max-age=2592000`; // 30 днів
-      set({ user, token, isAuthenticated: true });
+      set({ user, token, isAuthenticated: true, isLoading: false });
     } catch (error) {
       throw error;
     }
@@ -58,14 +59,17 @@ export const useAuthStore = create<AuthState>((set) => ({
 
   logout: async () => {
     try {
-      await authApi.logout();
+      const token = typeof window !== 'undefined' ? localStorage.getItem('auth_token') : null;
+      if (token) {
+        await authApi.logout();
+      }
     } catch (error) {
       console.error('Logout error:', error);
     } finally {
       localStorage.removeItem('auth_token');
       // Видаляємо з cookies
       document.cookie = 'auth_token=; path=/; max-age=0';
-      set({ user: null, token: null, isAuthenticated: false });
+      set({ user: null, token: null, isAuthenticated: false, isLoading: false });
     }
   },
 
@@ -91,6 +95,7 @@ export const useAuthStore = create<AuthState>((set) => ({
       });
     } catch (error) {
       localStorage.removeItem('auth_token');
+      document.cookie = 'auth_token=; path=/; max-age=0';
       set({ 
         user: null, 
         token: null, 

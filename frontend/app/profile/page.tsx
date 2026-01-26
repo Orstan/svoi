@@ -9,7 +9,7 @@ import { useAuthStore } from '@/store/authStore';
 
 export default function ProfilePage() {
   const router = useRouter();
-  const { user, isAuthenticated, logout, checkAuth } = useAuthStore();
+  const { user, isAuthenticated, logout, checkAuth, isLoading } = useAuthStore();
   const [activeTab, setActiveTab] = useState('info');
   const [isEditing, setIsEditing] = useState(false);
   
@@ -23,18 +23,11 @@ export default function ProfilePage() {
   });
 
   useEffect(() => {
-    // Перевіряємо чи є тестовий користувач
-    const testUser = localStorage.getItem('test_user');
-    if (testUser) {
-      const parsed = JSON.parse(testUser);
-      setUserData({
-        name: parsed.name,
-        email: parsed.email,
-        phone: '+48 123 456 789',
-        location: 'Warszawa',
-        avatar: '👤',
-      });
-    } else if (user) {
+    checkAuth();
+  }, [checkAuth]);
+
+  useEffect(() => {
+    if (user) {
       setUserData({
         name: user.name,
         email: user.email,
@@ -42,14 +35,16 @@ export default function ProfilePage() {
         location: 'Warszawa',
         avatar: user.avatar || '👤',
       });
-    } else {
-      // Якщо не авторизований - редірект на login
+    }
+  }, [user]);
+
+  useEffect(() => {
+    if (!isLoading && !isAuthenticated) {
       router.push('/login');
     }
-  }, [user, router]);
+  }, [isAuthenticated, isLoading, router]);
 
   const handleLogout = async () => {
-    localStorage.removeItem('test_user');
     await logout();
     router.push('/');
   };

@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/store/authStore';
+import { authApi } from '@/lib/api';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -21,42 +22,29 @@ export default function LoginPage() {
     setError('');
 
     try {
-      // ТЕСТОВИЙ РЕЖИМ - поки API не підключено
-      if (formData.email === 'test@test.com' && formData.password === 'test123') {
-        const testToken = 'test-token-' + Date.now();
-        const testUser = {
-          id: 1,
-          name: 'Тестовий Користувач',
-          email: formData.email,
-          role: 'user',
-        };
-        
-        localStorage.setItem('auth_token', testToken);
-        localStorage.setItem('test_user', JSON.stringify(testUser));
-        document.cookie = `auth_token=${testToken}; path=/; max-age=2592000`;
-        
-        router.push('/profile');
-        return;
-      }
-
       // Спроба реального входу через API
       await login(formData.email, formData.password);
-      
-      const token = localStorage.getItem('auth_token');
-      if (token) {
-        document.cookie = `auth_token=${token}; path=/; max-age=2592000`;
-      }
-      
+
       router.push('/profile');
     } catch (err: any) {
-      setError(err?.response?.data?.message || 'Помилка входу. Спробуйте test@test.com / test123 для демо');
+      setError(err?.response?.data?.message || 'Помилка входу. Перевірте email і пароль');
     } finally {
       setLoading(false);
     }
   };
 
-  const handleGoogleLogin = () => {
-    window.location.href = `${process.env.NEXT_PUBLIC_API_URL?.replace('/api/v1', '')}/auth/google`;
+  const handleGoogleLogin = async () => {
+    try {
+      const res = await authApi.googleRedirect();
+      const url = res.data?.url;
+      if (url) {
+        window.location.href = url;
+      } else {
+        setError('Помилка Google авторизації');
+      }
+    } catch (e) {
+      setError('Помилка Google авторизації');
+    }
   };
 
   return (

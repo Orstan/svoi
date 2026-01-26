@@ -11,27 +11,14 @@ import LanguageSwitcher from '@/components/LanguageSwitcher';
 export function Header() {
   const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { isAuthenticated, user, logout } = useAuthStore();
-  const [currentUser, setCurrentUser] = useState<any>(null);
+  const { isAuthenticated, user, logout, checkAuth, isLoading } = useAuthStore();
 
   useEffect(() => {
-    // Перевіряємо тестового користувача
-    const testUser = localStorage.getItem('test_user');
-    const testToken = localStorage.getItem('auth_token');
-    
-    if (testUser && testToken) {
-      setCurrentUser(JSON.parse(testUser));
-    } else if (user) {
-      setCurrentUser(user);
-    } else {
-      setCurrentUser(null);
-    }
-  }, [user]);
+    checkAuth();
+  }, [checkAuth]);
 
   const handleLogout = async () => {
-    localStorage.removeItem('test_user');
     await logout();
-    setCurrentUser(null);
     router.push('/');
   };
 
@@ -86,7 +73,7 @@ export function Header() {
           </nav>
 
           <div className="hidden md:flex items-center space-x-4">
-            {isAuthenticated ? (
+            {!isLoading && isAuthenticated ? (
               <>
                 <Link 
                   href="/favorites" 
@@ -102,7 +89,7 @@ export function Header() {
                   <span>{user?.name}</span>
                 </Link>
                 <button
-                  onClick={() => logout()}
+                  onClick={handleLogout}
                   className="text-sm text-gray-600 hover:text-gray-900"
                 >
                   Вийти

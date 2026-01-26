@@ -23,6 +23,7 @@ function MastersContent() {
   const [filters, setFilters] = useState({
     search: searchParams.get('search') || '',
     category: searchParams.get('category') || '',
+    subcategory: searchParams.get('subcategory') || '',
     voivodeship: searchParams.get('voivodeship') || '',
     city: searchParams.get('city') || '',
     verified: false,
@@ -36,9 +37,10 @@ function MastersContent() {
   const loadData = async () => {
     setLoading(true);
     try {
+      const effectiveCategoryId = filters.subcategory || filters.category;
       const params = {
         search: filters.search || undefined,
-        category_id: filters.category || undefined,
+        category_id: effectiveCategoryId || undefined,
         voivodeship_id: filters.voivodeship || undefined,
         location_id: filters.city || undefined,
         is_verified: filters.verified ? 1 : undefined,
@@ -110,6 +112,7 @@ function MastersContent() {
   }, [filters.voivodeship]);
 
   const selectedCategory = categories.find(c => c.id === Number(filters.category));
+  const selectedSubcategory = selectedCategory?.children?.find((c: any) => c.id === Number(filters.subcategory));
   const selectedVoivodeship = voivodeships.find(v => v.id === Number(filters.voivodeship));
   const selectedCity = cities.find((c) => c.id === Number(filters.city));
 
@@ -117,6 +120,7 @@ function MastersContent() {
     { label: 'Майстри', href: '/masters' },
   ];
   if (selectedCategory) breadcrumbItems.push({ label: selectedCategory.name });
+  if (selectedSubcategory) breadcrumbItems.push({ label: selectedSubcategory.name });
   if (selectedVoivodeship) breadcrumbItems.push({ label: selectedVoivodeship.name });
   if (selectedCity) breadcrumbItems.push({ label: selectedCity.name });
 
@@ -255,6 +259,7 @@ function MastersContent() {
                   {[
                     filters.search && 'пошук',
                     filters.category && 'категорія', 
+                    filters.subcategory && 'підкатегорія',
                     filters.voivodeship && 'воєводство',
                     filters.city && 'місто',
                     filters.verified && 'верифіковані'
@@ -267,7 +272,7 @@ function MastersContent() {
           
           {showFilters && (
             <div className="p-6 pt-0 border-t">
-              <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-6 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Пошук
@@ -290,13 +295,38 @@ function MastersContent() {
               </label>
               <select
                 value={filters.category}
-                onChange={(e) => setFilters({ ...filters, category: e.target.value })}
+                onChange={(e) => setFilters({ ...filters, category: e.target.value, subcategory: '' })}
                 className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500"
               >
                 <option value="">Всі категорії</option>
                 {categories.map((cat) => (
                   <option key={cat.id} value={cat.id}>
                     {cat.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Підкатегорія
+              </label>
+              <select
+                value={filters.subcategory}
+                onChange={(e) => setFilters({ ...filters, subcategory: e.target.value })}
+                disabled={!filters.category || !selectedCategory?.children?.length}
+                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500 disabled:bg-gray-50 disabled:text-gray-500"
+              >
+                <option value="">
+                  {!filters.category
+                    ? 'Спочатку оберіть категорію'
+                    : selectedCategory?.children?.length
+                      ? 'Всі підкатегорії'
+                      : 'Немає підкатегорій'}
+                </option>
+                {(selectedCategory?.children || []).map((sub: any) => (
+                  <option key={sub.id} value={sub.id}>
+                    {sub.name}
                   </option>
                 ))}
               </select>
