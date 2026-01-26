@@ -49,23 +49,43 @@ class LocationSeeder extends Seeder
         ];
 
         foreach ($voivodeships as $voivodeshipData) {
-            $voivodeship = Location::create([
-                'name' => $voivodeshipData['name'],
-                'name_uk' => $voivodeshipData['name_uk'],
-                'type' => 'voivodeship',
-                'lat' => $voivodeshipData['lat'],
-                'lng' => $voivodeshipData['lng'],
-                'slug' => Str::slug($voivodeshipData['name']),
-            ]);
+            $voivodeshipSlug = Str::slug($voivodeshipData['name']);
+
+            $voivodeship = Location::updateOrCreate(
+                ['slug' => $voivodeshipSlug],
+                [
+                    'name' => $voivodeshipData['name'],
+                    'name_uk' => $voivodeshipData['name_uk'],
+                    'type' => 'voivodeship',
+                    'lat' => $voivodeshipData['lat'],
+                    'lng' => $voivodeshipData['lng'],
+                ]
+            );
 
             if (isset($cities[$voivodeshipData['name']])) {
                 foreach ($cities[$voivodeshipData['name']] as $cityName) {
-                    Location::create([
-                        'name' => $cityName,
-                        'type' => 'city',
-                        'parent_id' => $voivodeship->id,
-                        'slug' => Str::slug($cityName),
-                    ]);
+                    $citySlug = Str::slug($voivodeshipData['name'] . '-' . $cityName);
+
+                    $existingCity = Location::cities()
+                        ->where('parent_id', $voivodeship->id)
+                        ->where('name', $cityName)
+                        ->first();
+
+                    if ($existingCity) {
+                        $existingCity->update([
+                            'slug' => $citySlug,
+                            'parent_id' => $voivodeship->id,
+                        ]);
+                    } else {
+                        Location::updateOrCreate(
+                            ['slug' => $citySlug],
+                            [
+                                'name' => $cityName,
+                                'type' => 'city',
+                                'parent_id' => $voivodeship->id,
+                            ]
+                        );
+                    }
                 }
             }
         }
