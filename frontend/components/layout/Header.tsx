@@ -6,7 +6,6 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Search, Menu, X, User, Heart } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
-import LanguageSwitcher from '@/components/LanguageSwitcher';
 
 export function Header() {
   const router = useRouter();
@@ -45,11 +44,6 @@ export function Header() {
           >
             Стати майстром
           </Link>
-
-          {/* Mobile: перемикач мови справа */}
-          <div className="md:hidden">
-            <LanguageSwitcher />
-          </div>
 
           <nav className="hidden md:flex items-center space-x-8">
             <Link 
@@ -111,8 +105,6 @@ export function Header() {
                 </Link>
               </>
             )}
-
-            <LanguageSwitcher />
 
             <Link 
               href="/become-master" 
