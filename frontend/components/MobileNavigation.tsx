@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
-import { Home, Menu, Plus, MessageCircle, User, X, Users, Grid3x3, HelpCircle, Info, Mail } from 'lucide-react';
+import { Home, Menu, Search, MessageCircle, User, X, Users, Grid3x3, HelpCircle, Info, Mail } from 'lucide-react';
 
 export default function MobileNavigation() {
   const pathname = usePathname();
@@ -31,7 +31,7 @@ export default function MobileNavigation() {
     {
       name: 'Додати',
       href: '/become-master',
-      icon: Plus,
+      icon: Search,
       isSpecial: true,
     },
     {
