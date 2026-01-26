@@ -73,15 +73,33 @@ class AuthController extends Controller
 
     public function googleRedirect()
     {
-        return response()->json([
-            'url' => Socialite::driver('google')->stateless()->redirect()->getTargetUrl()
-        ]);
+        try {
+            $driver = Socialite::driver('google')->stateless();
+            $redirectUri = env('GOOGLE_REDIRECT_URI');
+            if ($redirectUri) {
+                $driver = $driver->redirectUrl($redirectUri);
+            }
+
+            return response()->json([
+                'url' => $driver->redirect()->getTargetUrl(),
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Google OAuth is not configured',
+            ], 500);
+        }
     }
 
     public function googleCallback(Request $request)
     {
         try {
-            $googleUser = Socialite::driver('google')->stateless()->user();
+            $driver = Socialite::driver('google')->stateless();
+            $redirectUri = env('GOOGLE_REDIRECT_URI');
+            if ($redirectUri) {
+                $driver = $driver->redirectUrl($redirectUri);
+            }
+
+            $googleUser = $driver->user();
 
             $user = User::where('email', $googleUser->email)->first();
 
