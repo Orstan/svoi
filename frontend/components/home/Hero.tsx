@@ -18,20 +18,21 @@ export function Hero() {
   };
 
   return (
-    <section className="bg-gradient-to-br from-primary-50 to-secondary-50 py-20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-4">
+    <section className="relative overflow-hidden bg-[url('/poland.png')] bg-cover bg-center min-h-[420px] sm:min-h-[480px] lg:min-h-[560px] flex items-center py-12 sm:py-16 lg:py-20">
+      <div className="absolute inset-0 bg-white/80" />
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-8 sm:mb-10 lg:mb-12">
+          <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold text-gray-900 mb-3 sm:mb-4">
             Свої для Своїх
           </h1>
-          <p className="text-xl md:text-2xl text-gray-700">
+          <p className="text-lg sm:text-xl md:text-2xl text-gray-700">
             Знайди українських майстрів у Польщі
           </p>
         </div>
 
         <form 
           onSubmit={handleSearch}
-          className="max-w-4xl mx-auto bg-white rounded-2xl shadow-lg p-4"
+          className="max-w-4xl mx-auto bg-white/95 backdrop-blur-sm rounded-2xl shadow-lg p-4"
         >
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="md:col-span-2 relative">
@@ -63,7 +64,7 @@ export function Hero() {
           </button>
         </form>
 
-        <div className="mt-8 text-center">
+        <div className="mt-6 sm:mt-8 text-center">
           <p className="text-gray-600">
             Популярні пошуки:{' '}
             <button onClick={() => router.push('/masters?category=manicure')} className="text-primary-600 hover:underline">
