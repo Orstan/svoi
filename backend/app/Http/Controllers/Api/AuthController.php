@@ -102,12 +102,13 @@ class AuthController extends Controller
 
             $token = $user->createToken('auth_token')->plainTextToken;
 
-            return response()->json([
-                'user' => $user->load('masterProfile'),
-                'token' => $token,
-            ]);
+            $frontendUrl = rtrim(env('FRONTEND_URL', 'https://svoi24.pl'), '/');
+            $redirectUrl = $frontendUrl . '/auth/google/callback?token=' . urlencode($token);
+            return redirect()->away($redirectUrl);
         } catch (\Exception $e) {
-            return response()->json(['error' => 'Помилка авторизації через Google'], 400);
+            $frontendUrl = rtrim(env('FRONTEND_URL', 'https://svoi24.pl'), '/');
+            $redirectUrl = $frontendUrl . '/login?error=google';
+            return redirect()->away($redirectUrl);
         }
     }
 }
