@@ -13,6 +13,7 @@ function MastersContent() {
   const [masters, setMasters] = useState<any[]>([]);
   const [categories, setCategories] = useState<any[]>([]);
   const [voivodeships, setVoivodeships] = useState<any[]>([]);
+  const [cities, setCities] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [sortBy, setSortBy] = useState('rating');
   const [currentPage, setCurrentPage] = useState(1);
@@ -22,7 +23,8 @@ function MastersContent() {
   const [filters, setFilters] = useState({
     search: searchParams.get('search') || '',
     category: searchParams.get('category') || '',
-    location: searchParams.get('location') || '',
+    voivodeship: searchParams.get('voivodeship') || '',
+    city: searchParams.get('city') || '',
     verified: false,
   });
 
@@ -34,8 +36,18 @@ function MastersContent() {
   const loadData = async () => {
     setLoading(true);
     try {
+      const params = {
+        search: filters.search || undefined,
+        category_id: filters.category || undefined,
+        voivodeship_id: filters.voivodeship || undefined,
+        location_id: filters.city || undefined,
+        is_verified: filters.verified ? 1 : undefined,
+        sort_by: sortBy,
+        per_page: 500,
+      };
+
       const [mastersRes, categoriesRes, locationsRes] = await Promise.all([
-        mastersApi.list(filters),
+        mastersApi.list(params),
         categoriesApi.list(),
         locationsApi.voivodeships(),
       ]);
@@ -78,14 +90,35 @@ function MastersContent() {
     }
   };
 
+  useEffect(() => {
+    const loadCities = async () => {
+      if (!filters.voivodeship) {
+        setCities([]);
+        return;
+      }
+
+      try {
+        const res = await locationsApi.getCities(Number(filters.voivodeship));
+        setCities(res.data || []);
+      } catch (e) {
+        console.error('Error loading cities:', e);
+        setCities([]);
+      }
+    };
+
+    loadCities();
+  }, [filters.voivodeship]);
+
   const selectedCategory = categories.find(c => c.id === Number(filters.category));
-  const selectedLocation = voivodeships.find(v => v.id === Number(filters.location));
+  const selectedVoivodeship = voivodeships.find(v => v.id === Number(filters.voivodeship));
+  const selectedCity = cities.find((c) => c.id === Number(filters.city));
 
   const breadcrumbItems: Array<{label: string; href?: string}> = [
     { label: 'Майстри', href: '/masters' },
   ];
   if (selectedCategory) breadcrumbItems.push({ label: selectedCategory.name });
-  if (selectedLocation) breadcrumbItems.push({ label: selectedLocation.name });
+  if (selectedVoivodeship) breadcrumbItems.push({ label: selectedVoivodeship.name });
+  if (selectedCity) breadcrumbItems.push({ label: selectedCity.name });
 
   // Пагінація
   const totalPages = Math.ceil(masters.length / perPage);
@@ -222,7 +255,8 @@ function MastersContent() {
                   {[
                     filters.search && 'пошук',
                     filters.category && 'категорія', 
-                    filters.location && 'локація',
+                    filters.voivodeship && 'воєводство',
+                    filters.city && 'місто',
                     filters.verified && 'верифіковані'
                   ].filter(Boolean).join(', ') || 'не обрано'}
                 </span>
@@ -233,7 +267,7 @@ function MastersContent() {
           
           {showFilters && (
             <div className="p-6 pt-0 border-t">
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Пошук
@@ -273,14 +307,37 @@ function MastersContent() {
                 Воєводство
               </label>
               <select
-                value={filters.location}
-                onChange={(e) => setFilters({ ...filters, location: e.target.value })}
+                value={filters.voivodeship}
+                onChange={(e) =>
+                  setFilters({ ...filters, voivodeship: e.target.value, city: '' })
+                }
                 className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500"
               >
                 <option value="">Вся Польща</option>
                 {voivodeships.map((loc) => (
                   <option key={loc.id} value={loc.id}>
                     {loc.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Місто
+              </label>
+              <select
+                value={filters.city}
+                onChange={(e) => setFilters({ ...filters, city: e.target.value })}
+                disabled={!filters.voivodeship}
+                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500 disabled:bg-gray-50 disabled:text-gray-500"
+              >
+                <option value="">
+                  {filters.voivodeship ? 'Всі міста' : 'Спочатку оберіть воєводство'}
+                </option>
+                {cities.map((city) => (
+                  <option key={city.id} value={city.id}>
+                    {city.name}
                   </option>
                 ))}
               </select>

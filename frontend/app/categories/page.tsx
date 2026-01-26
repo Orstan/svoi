@@ -2,9 +2,36 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { ChevronDown, ChevronUp } from 'lucide-react';
+import {
+  Baby,
+  Camera,
+  Car,
+  ChevronDown,
+  ChevronUp,
+  GraduationCap,
+  Home,
+  Laptop,
+  Sparkles,
+  Wrench,
+} from 'lucide-react';
 import { categoriesApi } from '@/lib/api';
 import Breadcrumbs from '@/components/Breadcrumbs';
+
+function CategoryIcon({ category }: { category: any }) {
+  const raw = `${category?.slug || ''} ${category?.name || ''}`.toLowerCase();
+
+  let Icon = Sparkles;
+  if (raw.includes('краса') || raw.includes('beauty') || raw.includes('uroda')) Icon = Sparkles;
+  else if (raw.includes('ремонт') || raw.includes('repair') || raw.includes('napraw')) Icon = Wrench;
+  else if (raw.includes('авто') || raw.includes('auto') || raw.includes('car')) Icon = Car;
+  else if (raw.includes('освіта') || raw.includes('education') || raw.includes('eduk')) Icon = GraduationCap;
+  else if (raw.includes('діти') || raw.includes('children') || raw.includes('dzieci')) Icon = Baby;
+  else if (raw.includes('побут') || raw.includes('home') || raw.includes('dom')) Icon = Home;
+  else if (raw.includes('it') || raw.includes('айті') || raw.includes('tech')) Icon = Laptop;
+  else if (raw.includes('фото') || raw.includes('photo') || raw.includes('zdj')) Icon = Camera;
+
+  return <Icon className="w-7 h-7 sm:w-8 sm:h-8 text-primary-700" strokeWidth={2.2} />;
+}
 
 export default function CategoriesPage() {
   const [categories, setCategories] = useState<any[]>([]);
@@ -51,7 +78,7 @@ export default function CategoriesPage() {
                 <Link href={`/masters?category=${category.id}`} className="block">
                   <div className="flex flex-col items-center text-center">
                     <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-gradient-to-br from-primary-50 to-secondary-50 flex items-center justify-center shadow-inner">
-                      <span className="text-3xl">{category.icon}</span>
+                      <CategoryIcon category={category} />
                     </div>
                     <h2 className="mt-3 text-base sm:text-lg font-semibold text-gray-900 group-hover:text-primary-700 transition">
                       {category.name}

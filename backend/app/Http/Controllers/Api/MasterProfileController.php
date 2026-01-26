@@ -15,18 +15,29 @@ class MasterProfileController extends Controller
         $query = MasterProfile::with(['user', 'location', 'services.category'])
             ->approved();
 
-        if ($request->has('location_id')) {
-            $query->where('location_id', $request->location_id);
+        $locationId = $request->get('location_id') ?? $request->get('location');
+        $voivodeshipId = $request->get('voivodeship_id');
+        $categoryId = $request->get('category_id') ?? $request->get('category');
+        $isVerified = $request->get('is_verified');
+
+        if ($locationId) {
+            $query->where('location_id', $locationId);
         }
 
-        if ($request->has('category_id')) {
-            $query->whereHas('services', function ($q) use ($request) {
-                $q->where('category_id', $request->category_id);
+        if ($voivodeshipId) {
+            $query->whereHas('location', function ($q) use ($voivodeshipId) {
+                $q->where('parent_id', $voivodeshipId);
             });
         }
 
-        if ($request->has('is_verified')) {
-            $query->where('is_verified', true);
+        if ($categoryId) {
+            $query->whereHas('services', function ($q) use ($categoryId) {
+                $q->where('category_id', $categoryId);
+            });
+        }
+
+        if ($isVerified !== null) {
+            $query->where('is_verified', filter_var($isVerified, FILTER_VALIDATE_BOOLEAN));
         }
 
         if ($request->has('has_reviews')) {

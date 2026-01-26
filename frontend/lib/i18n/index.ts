@@ -27,13 +27,30 @@ export function useTranslation() {
     if (savedLocale && translations[savedLocale]) {
       setLocale(savedLocale);
       setT(translations[savedLocale]);
+      document.documentElement.lang = savedLocale;
     }
+
+    const handleLocaleChange = (event: Event) => {
+      const custom = event as CustomEvent<Locale>;
+      const newLocale = custom.detail;
+      if (newLocale && translations[newLocale]) {
+        setLocale(newLocale);
+        setT(translations[newLocale]);
+        document.documentElement.lang = newLocale;
+      }
+    };
+
+    document.addEventListener('localeChange', handleLocaleChange);
+    return () => {
+      document.removeEventListener('localeChange', handleLocaleChange);
+    };
   }, []);
 
   const changeLocale = (newLocale: Locale) => {
     setLocale(newLocale);
     setT(translations[newLocale]);
     localStorage.setItem('locale', newLocale);
+    document.documentElement.lang = newLocale;
     
     // Оновити API headers
     document.dispatchEvent(new CustomEvent('localeChange', { detail: newLocale }));
