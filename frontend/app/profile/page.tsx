@@ -65,7 +65,18 @@ export default function ProfilePage() {
           <div className="lg:col-span-1">
             <div className="bg-white rounded-lg shadow-sm p-4 sm:p-6">
               <div className="text-center">
-                <div className="text-4xl sm:text-6xl mb-3 sm:mb-4">{userData.avatar}</div>
+                {typeof userData.avatar === 'string' && userData.avatar.startsWith('http') ? (
+                  <div className="w-20 h-20 sm:w-28 sm:h-28 mx-auto mb-3 sm:mb-4 rounded-full overflow-hidden bg-gray-100">
+                    <img
+                      src={userData.avatar}
+                      alt={userData.name || 'Avatar'}
+                      className="w-full h-full object-cover"
+                      referrerPolicy="no-referrer"
+                    />
+                  </div>
+                ) : (
+                  <div className="text-4xl sm:text-6xl mb-3 sm:mb-4">{userData.avatar}</div>
+                )}
                 <h2 className="text-lg sm:text-xl font-bold text-gray-900 break-words">{userData.name}</h2>
                 <p className="text-sm sm:text-base text-gray-600 break-all">{userData.email}</p>
               </div>
