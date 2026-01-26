@@ -19,7 +19,7 @@ export function Hero() {
 
   return (
     <section className="relative overflow-hidden bg-[url('/poland.png')] bg-cover bg-[position:50%_35%] sm:bg-[position:50%_30%] lg:bg-[position:50%_25%] min-h-[420px] sm:min-h-[480px] lg:min-h-[560px] flex items-center py-12 sm:py-16 lg:py-20">
-      <div className="absolute inset-0 bg-white/80" />
+      <div className="absolute inset-0 bg-white/50" />
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-8 sm:mb-10 lg:mb-12">
           <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold text-gray-900 mb-3 sm:mb-4">
