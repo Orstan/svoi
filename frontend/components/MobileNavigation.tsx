@@ -29,9 +29,9 @@ export default function MobileNavigation() {
       isMenu: true,
     },
     {
-      name: 'Додати',
-      href: '/become-master',
-      icon: Plus,
+      name: 'Пошук',
+      href: '/masters',
+      icon: Search,
       isSpecial: true,
     },
     {

@@ -2,12 +2,14 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { ChevronDown, ChevronUp } from 'lucide-react';
 import { categoriesApi } from '@/lib/api';
 import Breadcrumbs from '@/components/Breadcrumbs';
 
 export default function CategoriesPage() {
   const [categories, setCategories] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [openCategoryId, setOpenCategoryId] = useState<number | null>(null);
 
   useEffect(() => {
     loadCategories();
@@ -61,17 +63,56 @@ export default function CategoriesPage() {
                 </Link>
 
                 {category.children && category.children.length > 0 && (
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    {category.children.map((subcategory: any) => (
-                      <Link
-                        key={subcategory.id}
-                        href={`/masters?category=${subcategory.id}`}
-                        className="inline-flex items-center rounded-full bg-gray-50 hover:bg-primary-50 text-gray-700 hover:text-primary-700 border border-gray-100 hover:border-primary-200 px-3 py-1 text-xs sm:text-sm transition"
+                  <>
+                    {/* Desktop/tablet: показуємо чіпи завжди */}
+                    <div className="hidden sm:flex mt-4 flex-wrap gap-2">
+                      {category.children.map((subcategory: any) => (
+                        <Link
+                          key={subcategory.id}
+                          href={`/masters?category=${subcategory.id}`}
+                          className="inline-flex items-center rounded-full bg-gray-50 hover:bg-primary-50 text-gray-700 hover:text-primary-700 border border-gray-100 hover:border-primary-200 px-3 py-1 text-xs sm:text-sm transition"
+                        >
+                          {subcategory.name}
+                        </Link>
+                      ))}
+                    </div>
+
+                    {/* Mobile: accordion */}
+                    <div className="sm:hidden mt-3">
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setOpenCategoryId(openCategoryId === category.id ? null : category.id)
+                        }
+                        className="w-full flex items-center justify-between rounded-xl bg-gray-50 hover:bg-gray-100 border border-gray-100 px-3 py-2 transition"
                       >
-                        {subcategory.name}
-                      </Link>
-                    ))}
-                  </div>
+                        <span className="text-sm font-medium text-gray-800">Підкатегорії</span>
+                        {openCategoryId === category.id ? (
+                          <ChevronUp size={18} className="text-gray-600" />
+                        ) : (
+                          <ChevronDown size={18} className="text-gray-600" />
+                        )}
+                      </button>
+
+                      <div
+                        className={`overflow-hidden transition-[max-height,opacity] duration-300 ease-in-out ${
+                          openCategoryId === category.id ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+                        }`}
+                      >
+                        <div className="pt-3 flex flex-wrap gap-2">
+                          {category.children.map((subcategory: any) => (
+                            <Link
+                              key={subcategory.id}
+                              href={`/masters?category=${subcategory.id}`}
+                              className="inline-flex items-center rounded-full bg-white text-gray-700 border border-gray-200 px-3 py-1 text-xs transition hover:border-primary-200 hover:text-primary-700"
+                            >
+                              {subcategory.name}
+                            </Link>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </>
                 )}
 
                 <div className="mt-4">
