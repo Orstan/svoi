@@ -38,7 +38,7 @@ export function Header() {
     <header className="bg-white shadow-sm sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          <Link href="/" className="flex items-center space-x-2">
+          <Link href="/" className="flex items-center space-x-2 md:static md:transform-none md:-translate-x-0 absolute left-1/2 -translate-x-1/2">
             <Image 
               src="/logo.png" 
               alt="Svoi24" 
