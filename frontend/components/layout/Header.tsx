@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Search, Menu, X, User, Heart } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
+import LanguageSwitcher from '@/components/LanguageSwitcher';
 
 export function Header() {
   const router = useRouter();
@@ -38,14 +39,8 @@ export function Header() {
     <header className="bg-white shadow-sm sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="relative flex justify-between items-center h-16">
-          <Link
-            href="/become-master"
-            className="md:hidden inline-flex items-center justify-center h-10 px-3 rounded-lg bg-secondary-500 text-white text-sm font-medium hover:bg-secondary-600 transition"
-          >
-            Стати майстром
-          </Link>
-
-          <Link href="/" className="flex items-center space-x-2 md:static md:transform-none md:-translate-x-0 absolute left-1/2 -translate-x-1/2">
+          {/* Mobile: лого зліва */}
+          <Link href="/" className="flex items-center space-x-2">
             <Image 
               src="/logo.png" 
               alt="Svoi24" 
@@ -55,6 +50,19 @@ export function Header() {
               priority
             />
           </Link>
+
+          {/* Mobile: кнопка по центру */}
+          <Link
+            href="/become-master"
+            className="md:hidden inline-flex items-center justify-center h-10 px-3 rounded-lg bg-secondary-500 text-white text-sm font-medium hover:bg-secondary-600 transition absolute left-1/2 -translate-x-1/2"
+          >
+            Стати майстром
+          </Link>
+
+          {/* Mobile: перемикач мови справа */}
+          <div className="md:hidden">
+            <LanguageSwitcher />
+          </div>
 
           <nav className="hidden md:flex items-center space-x-8">
             <Link 
@@ -116,6 +124,9 @@ export function Header() {
                 </Link>
               </>
             )}
+
+            <LanguageSwitcher />
+
             <Link 
               href="/become-master" 
               className="bg-secondary-500 text-white px-4 py-2 rounded-lg hover:bg-secondary-600 transition font-medium"
