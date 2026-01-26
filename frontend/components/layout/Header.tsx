@@ -37,10 +37,10 @@ export function Header() {
             />
           </Link>
 
-          {/* Mobile: кнопка по центру */}
+          {/* Mobile: кнопка справа */}
           <Link
             href="/become-master"
-            className="md:hidden inline-flex items-center justify-center h-10 px-3 rounded-lg bg-secondary-500 text-white text-sm font-medium hover:bg-secondary-600 transition absolute left-1/2 -translate-x-1/2"
+            className="md:hidden inline-flex items-center justify-center h-10 px-3 rounded-lg bg-secondary-500 text-white text-sm font-medium hover:bg-secondary-600 transition"
           >
             Стати майстром
           </Link>
