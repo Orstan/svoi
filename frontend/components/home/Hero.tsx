@@ -19,7 +19,7 @@ export function Hero() {
 
   return (
     <section className="relative overflow-hidden bg-[url('/poland.png')] bg-cover bg-[position:50%_35%] sm:bg-[position:50%_30%] lg:bg-[position:50%_25%] min-h-[420px] sm:min-h-[480px] lg:min-h-[560px] flex items-center py-12 sm:py-16 lg:py-20">
-      <div className="absolute inset-0 bg-white/50" />
+      <div className="absolute inset-0 bg-white/30" />
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-8 sm:mb-10 lg:mb-12">
           <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold text-gray-900 mb-3 sm:mb-4">
@@ -65,24 +65,26 @@ export function Hero() {
         </form>
 
         <div className="mt-6 sm:mt-8 text-center">
-          <p className="text-gray-600">
-            Популярні пошуки:{' '}
-            <button onClick={() => router.push('/masters?category=manicure')} className="text-primary-600 hover:underline">
-              Манікюр
-            </button>
-            {', '}
-            <button onClick={() => router.push('/masters?category=hydraulik')} className="text-primary-600 hover:underline">
-              Сантехнік
-            </button>
-            {', '}
-            <button onClick={() => router.push('/masters?category=fryzjer')} className="text-primary-600 hover:underline">
-              Перукар
-            </button>
-            {', '}
-            <button onClick={() => router.push('/masters?category=korepetycje')} className="text-primary-600 hover:underline">
-              Репетитор
-            </button>
-          </p>
+          <div className="inline-block bg-white/80 backdrop-blur-sm rounded-full px-4 py-2 shadow-sm">
+            <p className="text-gray-700">
+              Популярні пошуки:{' '}
+              <button onClick={() => router.push('/masters?category=manicure')} className="text-primary-700 hover:underline">
+                Манікюр
+              </button>
+              {', '}
+              <button onClick={() => router.push('/masters?category=hydraulik')} className="text-primary-700 hover:underline">
+                Сантехнік
+              </button>
+              {', '}
+              <button onClick={() => router.push('/masters?category=fryzjer')} className="text-primary-700 hover:underline">
+                Перукар
+              </button>
+              {', '}
+              <button onClick={() => router.push('/masters?category=korepetycje')} className="text-primary-700 hover:underline">
+                Репетитор
+              </button>
+            </p>
+          </div>
         </div>
       </div>
     </section>
