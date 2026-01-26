@@ -65,24 +65,26 @@ export function Hero() {
         </form>
 
         <div className="mt-6 sm:mt-8 text-center">
-          <p className="text-gray-600">
-            Популярні пошуки:{' '}
-            <button onClick={() => router.push('/masters?category=manicure')} className="text-primary-600 hover:underline">
-              Манікюр
-            </button>
-            {', '}
-            <button onClick={() => router.push('/masters?category=hydraulik')} className="text-primary-600 hover:underline">
-              Сантехнік
-            </button>
-            {', '}
-            <button onClick={() => router.push('/masters?category=fryzjer')} className="text-primary-600 hover:underline">
-              Перукар
-            </button>
-            {', '}
-            <button onClick={() => router.push('/masters?category=korepetycje')} className="text-primary-600 hover:underline">
-              Репетитор
-            </button>
-          </p>
+          <div className="inline-block bg-white/80 backdrop-blur-sm rounded-full px-4 py-2 shadow-sm">
+            <p className="text-gray-700">
+              Популярні пошуки:{' '}
+              <button onClick={() => router.push('/masters?category=manicure')} className="text-primary-700 hover:underline">
+                Манікюр
+              </button>
+              {', '}
+              <button onClick={() => router.push('/masters?category=hydraulik')} className="text-primary-700 hover:underline">
+                Сантехнік
+              </button>
+              {', '}
+              <button onClick={() => router.push('/masters?category=fryzjer')} className="text-primary-700 hover:underline">
+                Перукар
+              </button>
+              {', '}
+              <button onClick={() => router.push('/masters?category=korepetycje')} className="text-primary-700 hover:underline">
+                Репетитор
+              </button>
+            </p>
+          </div>
         </div>
       </div>
     </section>
